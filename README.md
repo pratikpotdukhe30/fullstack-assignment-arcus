@@ -1,53 +1,8 @@
-# Take-Home: Conversation Inbox
+# Conversation Inbox
 
-A small exercise — about **1–2 hours**. Please don't spend more. If you run out of time, stop and note what you'd do next in the README. A small, finished result is better than a large, unfinished one.
-
-## The task
-
-Support agents handle customer messages in a shared inbox. Build a small version of it.
-
-Messages arrive at a webhook (the included simulator plays the sender). You store them, group them into conversations per customer, sometimes reply automatically, and let an agent reply by hand.
-
-This starter includes the project setup, sample data, and the simulator. You write the feature.
-
-### Stubs to fill in
-
-- `POST /api/webhook` (`server/src/index.ts`) — receives messages. Returns 501 until you implement it.
-- `assistantReply()` (`server/src/assistant.ts`) — decides whether to auto-reply and what to say. Returns `null` until you implement it.
-- `server/src/store.ts` — where you keep data (your choice, see below).
-- `client/` — a React app; replace the placeholder page.
-
-### Required
-
-1. Implement `POST /api/webhook`: accept a message and store it in the right conversation (one per customer).
-2. Add the API endpoints your UI needs (list conversations, get a thread, post a reply).
-3. Show the conversation list (newest first, with a preview); open a thread to read it.
-4. Let an agent send a reply; persist it and show it in the thread.
-5. Implement `assistantReply()` so some messages get an automatic reply — e.g. a greeting, an order question, or a product question answered from the catalog. Two or three rules is enough; don't over-invest here.
-6. Search conversations by customer name or message text.
-7. Update this README (see "What to submit").
-
-### One decision we leave to you
-
-Messaging providers deliver the same message more than once (retries). The simulator can too — resend a message with the same `id`. Decide what should happen, implement it, and explain your choice in a sentence or two.
-
-### Data store
-
-Keep data wherever fits: an in-memory variable, a JSON file, or SQLite. No database server needed. Say what you chose and why.
-
-## Optional (only if you have time)
-
-None of these are required.
-
-- Unread counts
-- Optimistic UI when sending a reply
-- Tests for the assistant
-- Product recommendations from the catalog
-- Loading / error / empty states
+A small support-inbox app. Messages come in through a webhook, get grouped into conversations per customer, sometimes get an automatic reply, and an agent can reply by hand from a React UI.
 
 ## Running it
-
-Node 20+.
 
 ```bash
 npm install
@@ -55,44 +10,26 @@ npm run dev     # API on :4000, app on http://localhost:5173
 npm run seed    # load sample messages (run after dev is up)
 ```
 
-Open http://localhost:5173. Calls to `/api/*` are proxied to the server.
+Open http://localhost:5173.
 
-Send a message:
+## Decisions & trade-offs
 
-```bash
-npm run simulate -- --name "Emma Clark" --from "+15550001001" --text "do you have a desk lamp?"
-```
+**Duplicates:** deduped by `id` using a `Set`. A repeat id still gets a 200 back, but doesn't add a second message or trigger the assistant twice.
 
-Test a duplicate (same id twice):
+**Storage:** in-memory `Map`, keyed by customer phone number. Simple, fits the scope — trade-off is data doesn't survive a restart.
 
-```bash
-npm run simulate -- --id dup-1 --text "hello"
-npm run simulate -- --id dup-1 --text "hello"
-```
+**Assistant rules, checked in order:** product mentioned → catalog answer; sounds like an order → honest hand-off to a human (can't actually look up orders); plain greeting → friendly ack. Order matters, or a message like "hi, do you have the water bottle?" would just get a "hi there!" and never get answered.
 
-Until you implement the webhook it returns 501 — that's expected.
+Skipped unread counts, optimistic UI, tests, and product recommendations — all optional, left out to keep the required parts solid.
 
-## What to submit
+## AI usage
 
-1. A GitHub repo (fork/clone this one). Public, or private with an invite to GitHub user **@soroushahrari** (or email **soroush.ahrari@arcuscorp.it**).
-2. This README, updated with:
-   - How to run it, if different from above.
-   - **Decisions & trade-offs** — include your duplicate-message decision, your data-store choice, and anything you left out.
-   - **AI usage** — using AI tools is fine and encouraged. Briefly note what you used them for and where you changed their output.
-   - **What's next** — what you'd add or improve with more time.
+Used Claude as a coding companion — still learning React, and this was my first real Express + TypeScript backend.
 
-## What we look at
+- **Backend:** wrote it myself, had Claude review and catch bugs (a nested route, a missing bracket, a type/field mismatch, an auto-reply that overpromised).
+- **Frontend:** leaned on Claude more here given time constraints — it helped build the components while making sure I understood the concepts
+- **Testing:** did myself — seeded data, ran searches, sent messages, checked duplicates don't double-fire the assistant.
 
-We care about how you work, not a perfect result.
+## What's next
 
-- Whether it works.
-- Backend: a clean, sensible data model and API.
-- Frontend: a functional, easy-to-use UI.
-- Readable, maintainable code.
-- Clear explanations of your choices.
-
-## Notes
-
-- Aim for 1–2 hours.
-- AI tools are allowed; just note how you used them.
-- Questions are welcome — email **soroush.ahrari@arcuscorp.it**.
+Unread counts, optimistic UI, tests for the assistant rules, persistence (file/SQLite), and a real error state in the UI instead of just console logs.
