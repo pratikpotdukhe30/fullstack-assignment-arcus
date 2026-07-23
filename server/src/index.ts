@@ -1,6 +1,6 @@
 import express from "express";
 import type { InboundMessage } from "../../shared/types.js";
-import { addInBoundMessage, listConversations, getConversation, addAgentReply, addAssistantReply } from "./store.js";
+import { addInBoundMessage, listConversations, getConversation, addAgentReply, addAssistantReply, markConversationRead } from "./store.js";
 import { assistantReply } from "./assistant.js";
 const app = express();
 app.use(express.json());
@@ -46,6 +46,8 @@ app.get("/api/conversations/:id", (req, res) => {
     res.status(404).json({ ok: false, error: "conversation not found" });
     return;
   }
+
+  markConversationRead(req.params.id);
   res.json(conversation);
   
 });

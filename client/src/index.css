@@ -189,3 +189,29 @@ body {
   background: #a9c3f0;
   cursor: not-allowed;
 }
+
+.conversation-item-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.conversation-item-bottom .conversation-preview {
+  flex: 1;
+}
+
+.unread-badge {
+  flex-shrink: 0;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}

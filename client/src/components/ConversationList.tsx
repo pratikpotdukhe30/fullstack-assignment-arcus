@@ -56,6 +56,7 @@ export default function ConversationList({
                 <span className="conversation-time">{formatTimestamp(c.lastMessageTimestamp)}</span>
               </div>
               <p className="conversation-preview">{c.lastMessage}</p>
+              {c.unreadCount > 0 && <span className="unread-badge">{c.unreadCount}</span>}
             </button>
           </li>
         ))}

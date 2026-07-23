@@ -32,6 +32,7 @@ export interface Conversation {
   customerName: string;
   messages: Message[];
   updatedAt: string; 
+  unreadCount: number;
 }  
 
 export interface ConversationSummary {
@@ -40,4 +41,5 @@ export interface ConversationSummary {
   lastMessage: string;
   lastMessageTimestamp: string; 
   messageCount: number;
+  unreadCount: number;
 }

@@ -12,6 +12,7 @@ const seenMsgIds: Set<string> = new Set<string>();
 
 function fetchOrCreateConversation(from: string, customerName: string): Conversation {
     const existing = conversations.get(from);
+    
     if (existing) {
         return existing;
     }
@@ -21,6 +22,7 @@ function fetchOrCreateConversation(from: string, customerName: string): Conversa
         customerName,
         messages: [],
         updatedAt: new Date(0).toISOString(),
+        unreadCount: 0,
     };
 
     conversations.set(from, newConversation);
@@ -51,6 +53,7 @@ export function addInBoundMessage(inbound: InboundMessage):
     });
 
     conversation.updatedAt = inbound.timestamp;
+    conversation.unreadCount += 1;
 
     return { conversation, isDuplicate: false };
 }
@@ -72,6 +75,7 @@ export function listConversations(search?: string): ConversationSummary[] {
             lastMessage: c.messages[c.messages.length - 1]?.text ?? "",
             lastMessageTimestamp: c.updatedAt,
             messageCount: c.messages.length,
+            unreadCount: c.unreadCount,
         }));
 
     } 
@@ -80,6 +84,13 @@ export function listConversations(search?: string): ConversationSummary[] {
 export function getConversation(customerId: string): Conversation | undefined {
   return conversations.get(customerId);
 }
+
+export function markConversationRead(customerId: string): void {
+  const conversation = conversations.get(customerId);
+  if (conversation) {
+    conversation.unreadCount = 0;
+  }
+}   
 
 function addReply(customerId: string, text: string, sender: "agent" | "assistant"): Message | null {
   const conversation = conversations.get(customerId);
