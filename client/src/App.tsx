@@ -76,6 +76,21 @@ export default function App() {
     };
   }, [selectedId]);
 
+  useEffect(() => {
+    if (!selectedId) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const data = await fetchConversation(selectedId);
+        setSelectedConversation(data);
+      } catch (err) {
+        console.error("Failed to refresh conversation:", err);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [selectedId]);
+
   async function handleSendReply(text: string) {
     if (!selectedId) return;
     await sendReply(selectedId, text);

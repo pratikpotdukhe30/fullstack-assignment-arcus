@@ -15,3 +15,6 @@ client/dist/
 
 # typescript
 *.tsbuildinfo
+
+data/conversations.db
+data/conversations.db-*
