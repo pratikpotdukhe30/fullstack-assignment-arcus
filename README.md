@@ -24,6 +24,8 @@ Skipped unread counts, optimistic UI, tests, and product recommendations — all
 
 Add unread message counts per conversation, with live polling and instant clear on open
 
+Fix duplicate message ids creating phantom empty conversations for unrelated customers and also implemented permanent persistence using Sql Lite 
+
 ## AI usage
 
 Used Claude as a coding companion — still learning React, and this was my first real Express + TypeScript backend.
@@ -34,4 +36,4 @@ Used Claude as a coding companion — still learning React, and this was my firs
 
 ## What's next
 
-optimistic UI, tests for the assistant rules, persistence (file/SQLite), and a real error state in the UI instead of just console logs.
+optimistic UI, tests for the assistant rules, and a real error state in the UI instead of just console logs.
