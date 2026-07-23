@@ -22,6 +22,8 @@ Open http://localhost:5173.
 
 Skipped unread counts, optimistic UI, tests, and product recommendations — all optional, left out to keep the required parts solid.
 
+Add unread message counts per conversation, with live polling and instant clear on open
+
 ## AI usage
 
 Used Claude as a coding companion — still learning React, and this was my first real Express + TypeScript backend.
@@ -32,4 +34,4 @@ Used Claude as a coding companion — still learning React, and this was my firs
 
 ## What's next
 
-Unread counts, optimistic UI, tests for the assistant rules, persistence (file/SQLite), and a real error state in the UI instead of just console logs.
+optimistic UI, tests for the assistant rules, persistence (file/SQLite), and a real error state in the UI instead of just console logs.
